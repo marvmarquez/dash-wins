@@ -1,0 +1,101 @@
+---
+title: "WiNS Online Monitoring Result (2018)"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+set.seed(1)
+library(knitr)
+library(plotly)
+
+
+enc<- read.csv("C:/Users/GIZ FFSRM-000001/Desktop/data.csv")
+
+enc$region <- factor(enc$region, levels = unique(enc$region)[order(enc$all, decreasing = TRUE)])
+
+
+```
+
+
+Inputs {.sidebar}
+=======================================================================
+
+### Status of Encoding
+
+
+The recent streaming data is based from the data downloaded from DepEd WiNS database (http://deped-wins.sysdb.site) as of January 9, 2019. This result serves as partial and unofficial. 
+
+
+Dashboard
+=======================================================================
+
+
+Row
+-----------------------------------------------------------------------
+
+### National {.value-box}
+
+
+```{r}
+  valueBox(
+    value = "74.4",
+    icon = "fa-university",
+    color = "primary"
+  )
+
+```
+
+
+
+### Elementary{.value-box}
+
+```{r}
+  valueBox(
+    value = "74.7",
+    icon = "fa-user",
+    color = "warning"
+  )
+
+```
+
+
+
+### Secondary {.value-box}
+
+```{r}
+  valueBox(
+    value = "73.3",
+    icon = "fa-comments",
+    color = "success"
+  )
+```
+
+
+
+
+
+
+Row
+-----------------------------------------------------------------------
+
+### Level of Participation {data-width=650}
+
+```{r}
+plot_ly(enc, x=~region, y=~all,
+  name = "All_Schools", type = 'bar')
+
+```
+
+
+### Top Participating Regions {data-width=350}
+
+```{r}
+knitr::kable(enc[c("region", "elem", "secon", "all")])
+
+```
